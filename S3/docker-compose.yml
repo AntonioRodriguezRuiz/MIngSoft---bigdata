@@ -1,0 +1,233 @@
+services:
+
+  # Nodo Maestro de HDFS
+  namenode:
+    image: apache/hadoop:3.4.1
+    container_name: namenode
+    hostname: namenode
+    user: root
+    environment:
+      - HADOOP_HOME=/opt/hadoop
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+    volumes:
+      - ./hadoop_namenode:/opt/hadoop/data/nameNode:z
+      - ./hadoop_config:/opt/hadoop/etc/hadoop:z
+      - ./scripts/start-hdfs.sh:/start-hdfs.sh:z
+    ports:
+      - "9870:9870"
+      - "9000:9000"
+    command: ["/bin/bash", "/start-hdfs.sh"]
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.2
+
+  # Nodos de almacenamiento de HDFS
+  datanode1:
+    image: apache/hadoop:3.4.1
+    container_name: datanode1
+    hostname: datanode1
+    user: root
+    environment:
+      - HADOOP_HOME=/opt/hadoop
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+    volumes:
+      - ./hadoop_datanode1:/opt/hadoop/data/dataNode:z
+      - ./hadoop_config:/opt/hadoop/etc/hadoop:z
+      - ./scripts/init-datanode.sh:/init-datanode.sh:z
+    depends_on:
+      - namenode
+    command: ["/bin/bash", "/init-datanode.sh"]
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.3
+
+  datanode2:
+    image: apache/hadoop:3.4.1
+    container_name: datanode2
+    hostname: datanode2
+    user: root
+    environment:
+      - HADOOP_HOME=/opt/hadoop
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+    volumes:
+      - ./hadoop_datanode2:/opt/hadoop/data/dataNode:z
+      - ./hadoop_config:/opt/hadoop/etc/hadoop:z
+      - ./scripts/init-datanode.sh:/init-datanode.sh:z
+    depends_on:
+      - namenode
+    command: ["/bin/bash", "/init-datanode.sh"]
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.4
+
+  # YARN Resource Manager
+  resourcemanager:
+    build: .
+    container_name: resourcemanager
+    hostname: resourcemanager
+    user: root
+    environment:
+      - HADOOP_HOME=/opt/hadoop
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+    volumes:
+      - ./hadoop_config:/opt/hadoop/etc/hadoop:z
+      - ./scripts/start-yarn.sh:/start-yarn.sh:z
+    ports:
+      - "8088:8088"   # Interfaz web de YARN
+      - "8030:8030"   # Comunicación con aplicaciones
+      - "8031:8031"
+      - "8032:8032"
+      - "8033:8033"
+    depends_on:
+      - namenode
+    command: ["/bin/bash", "/start-yarn.sh"]
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.5
+
+  # YARN Node Manager
+  nodemanager:
+    build: .
+    container_name: nodemanager
+    hostname: nodemanager
+    user: root
+    environment:
+      - HADOOP_HOME=/opt/hadoop
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+    volumes:
+      - ./hadoop_config:/opt/hadoop/etc/hadoop:z
+      - ./scripts/start-nodemanager.sh:/start-nodemanager.sh:z
+    depends_on:
+      - resourcemanager
+    command: ["/bin/bash", "/start-nodemanager.sh"]
+    ports:
+      - "8042:8042"   # Interfaz del NodeManager
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.6
+
+  # Broker de Kafka
+  kafka3:
+    image: confluentinc/cp-kafka:7.9.0
+    container_name: kafka3
+    hostname: kafka3
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_BROKER_ID=2
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9096,PLAINTEXT_HOST://0.0.0.0:9097
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT_HOST://localhost:9097,PLAINTEXT://kafka3:9096
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    ports:
+      - "9096:9096"
+      - "9097:9097"
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.12
+  kafka2:
+    image: confluentinc/cp-kafka:7.9.0
+    container_name: kafka2
+    hostname: kafka2
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_BROKER_ID=2
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9094,PLAINTEXT_HOST://0.0.0.0:9095
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT_HOST://localhost:9095,PLAINTEXT://kafka2:9094
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    ports:
+      - "9094:9094"
+      - "9095:9095"
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.11
+  kafka:
+    image: confluentinc/cp-kafka:7.9.0
+    container_name: kafka
+    hostname: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:9093
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT_HOST://localhost:9093,PLAINTEXT://kafka:9092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.7
+
+  # Zookeeper para la coordinación de Kafka
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.9.0
+    container_name: zookeeper
+    hostname: zookeeper
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.8
+
+  # Kafka Connect para integración con otros sistemas
+  kafka-connect:
+    build:
+      context: .
+      dockerfile: Dockerfile.kafka-connect
+    container_name: kafka-connect
+    hostname: kafka-connect
+    depends_on:
+      - kafka
+    environment:
+    - CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR=1
+    - CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR=1
+    - CONNECT_STATUS_STORAGE_REPLICATION_FACTOR=1
+    - CONNECT_BOOTSTRAP_SERVERS=kafka:9092
+    - CONNECT_REST_PORT=8083
+    - CONNECT_GROUP_ID=connect-cluster
+    - CONNECT_CONFIG_STORAGE_TOPIC=connect-configs
+    - CONNECT_OFFSET_STORAGE_TOPIC=connect-offsets
+    - CONNECT_STATUS_STORAGE_TOPIC=connect-status
+    - CONNECT_KEY_CONVERTER=org.apache.kafka.connect.storage.StringConverter
+    - CONNECT_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+    - CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE=false
+    - CONNECT_REST_ADVERTISED_HOST_NAME=kafka-connect
+    ports:
+      - "8083:8083"
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.9
+
+
+  # Interfaz web para administración de Kafka
+  kafka-ui:
+    image: provectuslabs/kafka-ui:v0.7.2
+    container_name: kafka-ui
+    hostname: kafka-ui
+    depends_on:
+      - kafka
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka:9092
+    ports:
+      - "8080:8080"
+    networks:
+      hdfs_network:
+        ipv4_address: 172.20.0.10
+
+networks:
+  hdfs_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
