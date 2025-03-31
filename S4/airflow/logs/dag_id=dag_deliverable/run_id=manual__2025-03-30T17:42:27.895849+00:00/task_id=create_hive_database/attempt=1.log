@@ -1,0 +1,21 @@
+[2025-03-30T17:42:49.279+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-03-30T17:42:49.295+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dag_deliverable.create_hive_database manual__2025-03-30T17:42:27.895849+00:00 [queued]>
+[2025-03-30T17:42:49.299+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dag_deliverable.create_hive_database manual__2025-03-30T17:42:27.895849+00:00 [queued]>
+[2025-03-30T17:42:49.299+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 2
+[2025-03-30T17:42:49.312+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): create_hive_database> on 2025-03-30 17:42:27.895849+00:00
+[2025-03-30T17:42:49.318+0000] {standard_task_runner.py:64} INFO - Started process 205 to run task
+[2025-03-30T17:42:49.320+0000] {standard_task_runner.py:90} INFO - Running: ['airflow', 'tasks', 'run', 'dag_deliverable', 'create_hive_database', 'manual__2025-03-30T17:42:27.895849+00:00', '--job-id', '138', '--raw', '--subdir', 'DAGS_FOLDER/dag_deliverable.py', '--cfg-path', '/tmp/tmpkkx5kgkh']
+[2025-03-30T17:42:49.321+0000] {standard_task_runner.py:91} INFO - Job 138: Subtask create_hive_database
+[2025-03-30T17:42:49.350+0000] {task_command.py:426} INFO - Running <TaskInstance: dag_deliverable.create_hive_database manual__2025-03-30T17:42:27.895849+00:00 [running]> on host airflow
+[2025-03-30T17:42:49.398+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='dag_deliverable' AIRFLOW_CTX_TASK_ID='create_hive_database' AIRFLOW_CTX_EXECUTION_DATE='2025-03-30T17:42:27.895849+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-30T17:42:27.895849+00:00'
+[2025-03-30T17:42:49.399+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-03-30T17:42:49.412+0000] {base.py:84} INFO - Using connection ID 'hive_default' for task execution.
+[2025-03-30T17:42:49.436+0000] {hive.py:475} INFO - USE `default`
+[2025-03-30T17:42:49.453+0000] {hive.py:475} INFO - CREATE DATABASE IF NOT EXISTS weather
+[2025-03-30T17:42:49.462+0000] {dag_deliverable.py:82} INFO - ✅ Base de datos 'weather' creada correctamente en Hive
+[2025-03-30T17:42:49.462+0000] {python.py:237} INFO - Done. Returned value was: None
+[2025-03-30T17:42:49.462+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-03-30T17:42:49.466+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=dag_deliverable, task_id=create_hive_database, run_id=manual__2025-03-30T17:42:27.895849+00:00, execution_date=20250330T174227, start_date=20250330T174249, end_date=20250330T174249
+[2025-03-30T17:42:49.492+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 0
+[2025-03-30T17:42:49.503+0000] {taskinstance.py:3503} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-03-30T17:42:49.509+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

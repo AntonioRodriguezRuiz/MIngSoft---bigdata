@@ -1,0 +1,45 @@
+[2025-03-30T17:14:37.073+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-03-30T17:14:37.089+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dag_deliverable.insert_hive_data manual__2025-03-30T17:13:24.172060+00:00 [queued]>
+[2025-03-30T17:14:37.092+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dag_deliverable.insert_hive_data manual__2025-03-30T17:13:24.172060+00:00 [queued]>
+[2025-03-30T17:14:37.092+0000] {taskinstance.py:2306} INFO - Starting attempt 2 of 2
+[2025-03-30T17:14:37.105+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): insert_hive_data> on 2025-03-30 17:13:24.172060+00:00
+[2025-03-30T17:14:37.110+0000] {standard_task_runner.py:64} INFO - Started process 312 to run task
+[2025-03-30T17:14:37.113+0000] {standard_task_runner.py:90} INFO - Running: ['airflow', 'tasks', 'run', 'dag_deliverable', 'insert_hive_data', 'manual__2025-03-30T17:13:24.172060+00:00', '--job-id', '116', '--raw', '--subdir', 'DAGS_FOLDER/dag_deliverable.py', '--cfg-path', '/tmp/tmpc2ej_zzs']
+[2025-03-30T17:14:37.114+0000] {standard_task_runner.py:91} INFO - Job 116: Subtask insert_hive_data
+[2025-03-30T17:14:37.140+0000] {task_command.py:426} INFO - Running <TaskInstance: dag_deliverable.insert_hive_data manual__2025-03-30T17:13:24.172060+00:00 [running]> on host airflow
+[2025-03-30T17:14:37.178+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='dag_deliverable' AIRFLOW_CTX_TASK_ID='insert_hive_data' AIRFLOW_CTX_EXECUTION_DATE='2025-03-30T17:13:24.172060+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-30T17:13:24.172060+00:00'
+[2025-03-30T17:14:37.178+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-03-30T17:14:37.191+0000] {base.py:84} INFO - Using connection ID 'hive_default' for task execution.
+[2025-03-30T17:14:37.214+0000] {hive.py:475} INFO - USE `default`
+[2025-03-30T17:14:37.236+0000] {hive.py:475} INFO - 
+            INSERT INTO tienda.usuarios VALUES
+            (1, 'Alice', 'alice@example.com'),
+            (2, 'Bob', 'bob@example.com'),
+            (3, 'Charlie', 'charlie@example.com')
+        
+[2025-03-30T17:14:37.246+0000] {dag_deliverable.py:118} ERROR - ❌ Error al insertar datos en Hive: TExecuteStatementResp(status=TStatus(statusCode=3, infoMessages=['Server-side error; please check HS2 logs.'], sqlState='42000', errorCode=40000, errorMessage='Error while compiling statement: FAILED: RuntimeException org.apache.hadoop.hive.ql.metadata.InvalidTableException: Table not found usuarios'), operationHandle=None)
+[2025-03-30T17:14:37.246+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-03-30T17:14:37.247+0000] {taskinstance.py:2905} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.9/site-packages/airflow/models/taskinstance.py", line 465, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.9/site-packages/airflow/models/taskinstance.py", line 432, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.9/site-packages/airflow/models/baseoperator.py", line 401, in wrapper
+    return func(self, *args, **kwargs)
+  File "/home/airflow/.local/lib/python3.9/site-packages/airflow/operators/python.py", line 235, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.9/site-packages/airflow/operators/python.py", line 252, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/dag_deliverable.py", line 108, in insert_data
+    cursor.execute("""
+  File "/home/airflow/.local/lib/python3.9/site-packages/pyhive/hive.py", line 481, in execute
+    _check_status(response)
+  File "/home/airflow/.local/lib/python3.9/site-packages/pyhive/hive.py", line 611, in _check_status
+    raise OperationalError(response)
+pyhive.exc.OperationalError: TExecuteStatementResp(status=TStatus(statusCode=3, infoMessages=['Server-side error; please check HS2 logs.'], sqlState='42000', errorCode=40000, errorMessage='Error while compiling statement: FAILED: RuntimeException org.apache.hadoop.hive.ql.metadata.InvalidTableException: Table not found usuarios'), operationHandle=None)
+[2025-03-30T17:14:37.250+0000] {taskinstance.py:1206} INFO - Marking task as FAILED. dag_id=dag_deliverable, task_id=insert_hive_data, run_id=manual__2025-03-30T17:13:24.172060+00:00, execution_date=20250330T171324, start_date=20250330T171437, end_date=20250330T171437
+[2025-03-30T17:14:37.260+0000] {standard_task_runner.py:110} ERROR - Failed to execute job 116 for task insert_hive_data (TExecuteStatementResp(status=TStatus(statusCode=3, infoMessages=['Server-side error; please check HS2 logs.'], sqlState='42000', errorCode=40000, errorMessage='Error while compiling statement: FAILED: RuntimeException org.apache.hadoop.hive.ql.metadata.InvalidTableException: Table not found usuarios'), operationHandle=None); 312)
+[2025-03-30T17:14:37.285+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 1
+[2025-03-30T17:14:37.293+0000] {taskinstance.py:3503} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-03-30T17:14:37.294+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

@@ -1,0 +1,59 @@
+[2025-03-30T17:35:54.735+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-03-30T17:35:54.754+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dag_deliverable.create_hive_table manual__2025-03-30T17:34:43.776104+00:00 [queued]>
+[2025-03-30T17:35:54.758+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dag_deliverable.create_hive_table manual__2025-03-30T17:34:43.776104+00:00 [queued]>
+[2025-03-30T17:35:54.758+0000] {taskinstance.py:2306} INFO - Starting attempt 2 of 2
+[2025-03-30T17:35:54.772+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): create_hive_table> on 2025-03-30 17:34:43.776104+00:00
+[2025-03-30T17:35:54.777+0000] {standard_task_runner.py:64} INFO - Started process 241 to run task
+[2025-03-30T17:35:54.779+0000] {standard_task_runner.py:90} INFO - Running: ['airflow', 'tasks', 'run', 'dag_deliverable', 'create_hive_table', 'manual__2025-03-30T17:34:43.776104+00:00', '--job-id', '130', '--raw', '--subdir', 'DAGS_FOLDER/dag_deliverable.py', '--cfg-path', '/tmp/tmpsutpzg7g']
+[2025-03-30T17:35:54.780+0000] {standard_task_runner.py:91} INFO - Job 130: Subtask create_hive_table
+[2025-03-30T17:35:54.806+0000] {task_command.py:426} INFO - Running <TaskInstance: dag_deliverable.create_hive_table manual__2025-03-30T17:34:43.776104+00:00 [running]> on host airflow
+[2025-03-30T17:35:54.849+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='dag_deliverable' AIRFLOW_CTX_TASK_ID='create_hive_table' AIRFLOW_CTX_EXECUTION_DATE='2025-03-30T17:34:43.776104+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-30T17:34:43.776104+00:00'
+[2025-03-30T17:35:54.850+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-03-30T17:35:54.865+0000] {base.py:84} INFO - Using connection ID 'hive_default' for task execution.
+[2025-03-30T17:35:54.896+0000] {hive.py:475} INFO - USE `default`
+[2025-03-30T17:35:54.924+0000] {hive.py:475} INFO - 
+            CREATE EXTERNAL TABLE IF NOT EXISTS sensor_data (
+                timestamp DATETIME,
+                temperature_salon FLOAT,
+                humidity_salon FLOAT,
+                air_salon FLOAT,
+                temperature_chambre FLOAT,
+                humidity_chambre FLOAT,
+                air_chambre FLOAT,
+                temperature_bureau FLOAT,
+                humidity_bureau FLOAT,
+                air_bureau FLOAT,
+                temperature_exterieur FLOAT,
+                humidity_exterieur FLOAT,
+                air_exterieur FLOAT
+            )
+            ROW FORMAT SERDE 'org.apache.hive.hcatalog.data.JsonSerDe'
+            STORED AS TEXTFILE
+            LOCATION 'hdfs://namenode:9000/topics/sensors';
+        
+[2025-03-30T17:35:54.929+0000] {dag_deliverable.py:118} ERROR - ❌ Error al crear la tabla en Hive: TExecuteStatementResp(status=TStatus(statusCode=3, infoMessages=['Server-side error; please check HS2 logs.'], sqlState='42000', errorCode=40000, errorMessage="Error while compiling statement: FAILED: ParseException line 3:16 cannot recognize input near 'timestamp' 'DATETIME' ',' in column name or constraint"), operationHandle=None)
+[2025-03-30T17:35:54.930+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-03-30T17:35:54.930+0000] {taskinstance.py:2905} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.9/site-packages/airflow/models/taskinstance.py", line 465, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.9/site-packages/airflow/models/taskinstance.py", line 432, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.9/site-packages/airflow/models/baseoperator.py", line 401, in wrapper
+    return func(self, *args, **kwargs)
+  File "/home/airflow/.local/lib/python3.9/site-packages/airflow/operators/python.py", line 235, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.9/site-packages/airflow/operators/python.py", line 252, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/dag_deliverable.py", line 94, in create_table
+    cursor.execute(f"""
+  File "/home/airflow/.local/lib/python3.9/site-packages/pyhive/hive.py", line 481, in execute
+    _check_status(response)
+  File "/home/airflow/.local/lib/python3.9/site-packages/pyhive/hive.py", line 611, in _check_status
+    raise OperationalError(response)
+pyhive.exc.OperationalError: TExecuteStatementResp(status=TStatus(statusCode=3, infoMessages=['Server-side error; please check HS2 logs.'], sqlState='42000', errorCode=40000, errorMessage="Error while compiling statement: FAILED: ParseException line 3:16 cannot recognize input near 'timestamp' 'DATETIME' ',' in column name or constraint"), operationHandle=None)
+[2025-03-30T17:35:54.934+0000] {taskinstance.py:1206} INFO - Marking task as FAILED. dag_id=dag_deliverable, task_id=create_hive_table, run_id=manual__2025-03-30T17:34:43.776104+00:00, execution_date=20250330T173443, start_date=20250330T173554, end_date=20250330T173554
+[2025-03-30T17:35:54.948+0000] {standard_task_runner.py:110} ERROR - Failed to execute job 130 for task create_hive_table (TExecuteStatementResp(status=TStatus(statusCode=3, infoMessages=['Server-side error; please check HS2 logs.'], sqlState='42000', errorCode=40000, errorMessage="Error while compiling statement: FAILED: ParseException line 3:16 cannot recognize input near 'timestamp' 'DATETIME' ',' in column name or constraint"), operationHandle=None); 241)
+[2025-03-30T17:35:54.991+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 1
+[2025-03-30T17:35:55.001+0000] {taskinstance.py:3503} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-03-30T17:35:55.002+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

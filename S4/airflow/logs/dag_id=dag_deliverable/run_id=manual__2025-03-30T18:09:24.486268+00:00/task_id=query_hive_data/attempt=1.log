@@ -1,0 +1,30 @@
+[2025-03-30T18:09:39.340+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-03-30T18:09:39.357+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dag_deliverable.query_hive_data manual__2025-03-30T18:09:24.486268+00:00 [queued]>
+[2025-03-30T18:09:39.361+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dag_deliverable.query_hive_data manual__2025-03-30T18:09:24.486268+00:00 [queued]>
+[2025-03-30T18:09:39.362+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 2
+[2025-03-30T18:09:39.376+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): query_hive_data> on 2025-03-30 18:09:24.486268+00:00
+[2025-03-30T18:09:39.382+0000] {standard_task_runner.py:64} INFO - Started process 239 to run task
+[2025-03-30T18:09:39.385+0000] {standard_task_runner.py:90} INFO - Running: ['airflow', 'tasks', 'run', 'dag_deliverable', 'query_hive_data', 'manual__2025-03-30T18:09:24.486268+00:00', '--job-id', '169', '--raw', '--subdir', 'DAGS_FOLDER/dag_deliverable.py', '--cfg-path', '/tmp/tmpp47wj7tc']
+[2025-03-30T18:09:39.386+0000] {standard_task_runner.py:91} INFO - Job 169: Subtask query_hive_data
+[2025-03-30T18:09:39.414+0000] {task_command.py:426} INFO - Running <TaskInstance: dag_deliverable.query_hive_data manual__2025-03-30T18:09:24.486268+00:00 [running]> on host airflow
+[2025-03-30T18:09:39.495+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='dag_deliverable' AIRFLOW_CTX_TASK_ID='query_hive_data' AIRFLOW_CTX_EXECUTION_DATE='2025-03-30T18:09:24.486268+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-30T18:09:24.486268+00:00'
+[2025-03-30T18:09:39.496+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-03-30T18:09:39.512+0000] {base.py:84} INFO - Using connection ID 'hive_default' for task execution.
+[2025-03-30T18:09:39.537+0000] {hive.py:475} INFO - USE `default`
+[2025-03-30T18:09:39.564+0000] {hive.py:475} INFO - SELECT 
+            DATE(record_timestamp) AS record_date,  -- Extracts only the date
+            AVG(temperature_salon) AS avg_temp_salon,
+            AVG(temperature_chambre) AS avg_temp_chambre,
+            AVG(temperature_bureau) AS avg_temp_bureau,
+            AVG(temperature_exterieur) AS avg_temp_exterieur
+            FROM weather.sensor_data
+            GROUP BY DATE(record_timestamp)
+            ORDER BY record_date
+       
+[2025-03-30T18:09:45.111+0000] {dag_deliverable.py:177} INFO - Resultados de Hive:
+[2025-03-30T18:09:45.112+0000] {python.py:237} INFO - Done. Returned value was: None
+[2025-03-30T18:09:45.113+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-03-30T18:09:45.117+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=dag_deliverable, task_id=query_hive_data, run_id=manual__2025-03-30T18:09:24.486268+00:00, execution_date=20250330T180924, start_date=20250330T180939, end_date=20250330T180945
+[2025-03-30T18:09:45.167+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 0
+[2025-03-30T18:09:45.174+0000] {taskinstance.py:3503} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-03-30T18:09:45.175+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

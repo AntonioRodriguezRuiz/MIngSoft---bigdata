@@ -1,0 +1,40 @@
+[2025-03-30T18:09:36.699+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-03-30T18:09:36.717+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dag_deliverable.create_hive_table manual__2025-03-30T18:09:24.486268+00:00 [queued]>
+[2025-03-30T18:09:36.722+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dag_deliverable.create_hive_table manual__2025-03-30T18:09:24.486268+00:00 [queued]>
+[2025-03-30T18:09:36.722+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 2
+[2025-03-30T18:09:36.740+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): create_hive_table> on 2025-03-30 18:09:24.486268+00:00
+[2025-03-30T18:09:36.746+0000] {standard_task_runner.py:64} INFO - Started process 222 to run task
+[2025-03-30T18:09:36.749+0000] {standard_task_runner.py:90} INFO - Running: ['airflow', 'tasks', 'run', 'dag_deliverable', 'create_hive_table', 'manual__2025-03-30T18:09:24.486268+00:00', '--job-id', '168', '--raw', '--subdir', 'DAGS_FOLDER/dag_deliverable.py', '--cfg-path', '/tmp/tmpecf0_tdo']
+[2025-03-30T18:09:36.750+0000] {standard_task_runner.py:91} INFO - Job 168: Subtask create_hive_table
+[2025-03-30T18:09:36.779+0000] {task_command.py:426} INFO - Running <TaskInstance: dag_deliverable.create_hive_table manual__2025-03-30T18:09:24.486268+00:00 [running]> on host airflow
+[2025-03-30T18:09:36.843+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='dag_deliverable' AIRFLOW_CTX_TASK_ID='create_hive_table' AIRFLOW_CTX_EXECUTION_DATE='2025-03-30T18:09:24.486268+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-30T18:09:24.486268+00:00'
+[2025-03-30T18:09:36.843+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-03-30T18:09:36.861+0000] {base.py:84} INFO - Using connection ID 'hive_default' for task execution.
+[2025-03-30T18:09:36.888+0000] {hive.py:475} INFO - USE `default`
+[2025-03-30T18:09:36.911+0000] {hive.py:475} INFO - 
+            CREATE EXTERNAL TABLE IF NOT EXISTS weather.sensor_data (
+                record_timestamp DATE,
+                temperature_salon FLOAT,
+                humidity_salon FLOAT,
+                air_salon FLOAT,
+                temperature_chambre FLOAT,
+                humidity_chambre FLOAT,
+                air_chambre FLOAT,
+                temperature_bureau FLOAT,
+                humidity_bureau FLOAT,
+                air_bureau FLOAT,
+                temperature_exterieur FLOAT,
+                humidity_exterieur FLOAT,
+                air_exterieur FLOAT
+            )
+            ROW FORMAT SERDE 'org.apache.hive.hcatalog.data.JsonSerDe'
+            STORED AS TEXTFILE
+            LOCATION 'hdfs://namenode:9000/topics/sensores'
+        
+[2025-03-30T18:09:36.997+0000] {dag_deliverable.py:133} INFO - ✅ Tabla creada correctamente en Hive
+[2025-03-30T18:09:36.998+0000] {python.py:237} INFO - Done. Returned value was: None
+[2025-03-30T18:09:36.998+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-03-30T18:09:37.002+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=dag_deliverable, task_id=create_hive_table, run_id=manual__2025-03-30T18:09:24.486268+00:00, execution_date=20250330T180924, start_date=20250330T180936, end_date=20250330T180937
+[2025-03-30T18:09:37.041+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 0
+[2025-03-30T18:09:37.054+0000] {taskinstance.py:3503} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-03-30T18:09:37.063+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

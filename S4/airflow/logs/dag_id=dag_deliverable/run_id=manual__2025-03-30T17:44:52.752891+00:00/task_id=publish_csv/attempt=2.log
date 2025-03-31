@@ -1,0 +1,35 @@
+[2025-03-30T17:46:09.987+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-03-30T17:46:10.001+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dag_deliverable.publish_csv manual__2025-03-30T17:44:52.752891+00:00 [queued]>
+[2025-03-30T17:46:10.005+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dag_deliverable.publish_csv manual__2025-03-30T17:44:52.752891+00:00 [queued]>
+[2025-03-30T17:46:10.005+0000] {taskinstance.py:2306} INFO - Starting attempt 2 of 2
+[2025-03-30T17:46:10.018+0000] {taskinstance.py:2330} INFO - Executing <Task(ProduceToTopicOperator): publish_csv> on 2025-03-30 17:44:52.752891+00:00
+[2025-03-30T17:46:10.022+0000] {standard_task_runner.py:64} INFO - Started process 207 to run task
+[2025-03-30T17:46:10.025+0000] {standard_task_runner.py:90} INFO - Running: ['airflow', 'tasks', 'run', 'dag_deliverable', 'publish_csv', 'manual__2025-03-30T17:44:52.752891+00:00', '--job-id', '143', '--raw', '--subdir', 'DAGS_FOLDER/dag_deliverable.py', '--cfg-path', '/tmp/tmp4gkk4zrd']
+[2025-03-30T17:46:10.026+0000] {standard_task_runner.py:91} INFO - Job 143: Subtask publish_csv
+[2025-03-30T17:46:10.051+0000] {task_command.py:426} INFO - Running <TaskInstance: dag_deliverable.publish_csv manual__2025-03-30T17:44:52.752891+00:00 [running]> on host airflow
+[2025-03-30T17:46:10.093+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='dag_deliverable' AIRFLOW_CTX_TASK_ID='publish_csv' AIRFLOW_CTX_EXECUTION_DATE='2025-03-30T17:44:52.752891+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-30T17:44:52.752891+00:00'
+[2025-03-30T17:46:10.093+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-03-30T17:46:10.106+0000] {base.py:84} INFO - Using connection ID 'kafka_default' for task execution.
+[2025-03-30T17:46:10.108+0000] {produce.py:41} INFO - Producer <cimpl.Producer object at 0x7fe70f95bcc0>
+[2025-03-30T17:46:10.108+0000] {dag_deliverable.py:69} ERROR - ❌ Error al leer el archivo: <lambda>() got an unexpected keyword argument 'timestamp'
+[2025-03-30T17:46:10.108+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-03-30T17:46:10.109+0000] {taskinstance.py:2905} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.9/site-packages/airflow/models/taskinstance.py", line 465, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.9/site-packages/airflow/models/taskinstance.py", line 432, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.9/site-packages/airflow/models/baseoperator.py", line 401, in wrapper
+    return func(self, *args, **kwargs)
+  File "/home/airflow/.local/lib/python3.9/site-packages/airflow/providers/apache/kafka/operators/produce.py", line 126, in execute
+    for k, v in producer_callable():
+  File "/opt/airflow/dags/dag_deliverable.py", line 61, in publish_csv
+    weather_data = [Weather(**row) for row in data]
+  File "/opt/airflow/dags/dag_deliverable.py", line 61, in <listcomp>
+    weather_data = [Weather(**row) for row in data]
+TypeError: <lambda>() got an unexpected keyword argument 'timestamp'
+[2025-03-30T17:46:10.111+0000] {taskinstance.py:1206} INFO - Marking task as FAILED. dag_id=dag_deliverable, task_id=publish_csv, run_id=manual__2025-03-30T17:44:52.752891+00:00, execution_date=20250330T174452, start_date=20250330T174610, end_date=20250330T174610
+[2025-03-30T17:46:10.121+0000] {standard_task_runner.py:110} ERROR - Failed to execute job 143 for task publish_csv (<lambda>() got an unexpected keyword argument 'timestamp'; 207)
+[2025-03-30T17:46:10.157+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 1
+[2025-03-30T17:46:10.168+0000] {taskinstance.py:3503} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-03-30T17:46:10.175+0000] {local_task_job_runner.py:222} INFO - ::endgroup::
