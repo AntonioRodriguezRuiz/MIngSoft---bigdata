@@ -1,3 +1,11 @@
+---
+header-includes:
+ - \usepackage{fvextra}
+ - \usepackage{graphicx}
+ - \usepackage{float}
+ - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+---
+
 # Deliverable 3
 
 ## Creating a Kafka topic
@@ -120,17 +128,47 @@ Finally, for the third, we must obtain the instances where humidity has changed 
 
 ## Evidences
 
-![Data sent to kafka topic](images/topic.png)
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/topic.png}
+\caption{Data sent to kafka topic}
+\label{fig:producer}
+\end{figure}
 
-![Data in HDFS](images/hdfs.png)
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/hdfs.png}
+\caption{Data in HDFS}
+\label{fig:hdfs}
+\end{figure}
 
-![Executed DAG](images/dag.png)
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/dag.png}
+\caption{Executed DAG}
+\label{fig:dag}
+\end{figure}
 
-![Hive query 1](images/query1.png)
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/query1.png}
+\caption{Hive query 1}
+\label{fig:query1}
+\end{figure}
 
-![Hive query 2](images/query1.png)
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/query2.png}
+\caption{Hive query 2}
+\label{fig:query2}
+\end{figure}
 
-![Hive query 3](images/query1.png)
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/query3.png}
+\caption{Hive query 3}
+\label{fig:query3}
+\end{figure}
 
 ## Challenges encountered
 

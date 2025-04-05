@@ -1,3 +1,11 @@
+---
+header-includes:
+ - \usepackage{float}
+ - \usepackage{fvextra}
+ - \usepackage{graphicx}
+ - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+---
+
 # Deliverable 2: Kafka Producer and Consumer
 
 ## Creating a Kafka topic
@@ -38,9 +46,19 @@ Then, it iterates over all the registers, dumps them into a JSON format and send
 
 ## Evidences
 
-![Sending data to kafka](images/producer.png)
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/producer.png}
+\caption{Sending data to kafka}
+\label{fig:producer}
+\end{figure}
 
-![First three entries of data in HDFS](images/hadoop.png)
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/hadoop.png}
+\caption{First three entries of data in HDFS}
+\label{fig:hadoop}
+\end{figure}
 
 ## Challenges encountered
 

@@ -1,3 +1,9 @@
+---
+header-includes:
+ - \usepackage{fvextra}
+ - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+---
+
 # Distributed analysis of data (V2)
 
 ## Configure Hive with postgresql
@@ -53,7 +59,7 @@ docker exec -it hiveserver2 beeline -u jdbc:hive2://hiveserver2:10000
   LIMIT 5;
 ```
 
-| clientes.lclid  | clientes.stdortou  | clientes.acorn  | clientes.acorn_grouped  | clientes.file  |
+| lclid  | stdortou  | acorn  | acorn_grouped  | file  |
 |-----------------|--------------------|-----------------|-------------------------|----------------|
 | MAC005492       | ToU                | ACORN-          | ACORN-                  | block_0        |
 | MAC001074       | ToU                | ACORN-          | ACORN-                  | block_0        |
@@ -72,18 +78,20 @@ docker exec -it hiveserver2 beeline -u jdbc:hive2://hiveserver2:10000
   LIMIT 10;
 ```
 
-| consumos.lclid  | consumos.day  | consumos.energy_median  | consumos.energy_mean  | consumos.energy_max  | consumos.energy_count  | consumos.energy_std  | consumos.energy_sum  | consumos.energy_min  |
+Note: The correspoding table has float values trimed to 2 decimal for visualization purposes. The day column has been reduced to only dat as all 10 first entries start with "2011-12-" and the whole table does not fit. lclid has also been reduced to the las 6 numbers of the id for a similar reason.
+
+| lclid  | day  | e_median  | e_mean  | e_max  | e_count  | e_std  | e_sum  | e_min  |
 |-----------------|---------------|-------------------------|-----------------------|----------------------|------------------------|----------------------|----------------------|----------------------|
-| MAC000131       | 2011-12-15    | 0.485                   | 0.43204546            | 0.868                | 22                     | 0.2391458            | 9.505                | 0.072                |
-| MAC000131       | 2011-12-16    | 0.1415                  | 0.29616666            | 1.116                | 48                     | 0.2814713            | 14.216001            | 0.031                |
-| MAC000131       | 2011-12-17    | 0.1015                  | 0.1898125             | 0.685                | 48                     | 0.18840468           | 9.111                | 0.064                |
-| MAC000131       | 2011-12-18    | 0.114                   | 0.21897916            | 0.676                | 48                     | 0.20291927           | 10.511               | 0.065                |
-| MAC000131       | 2011-12-19    | 0.191                   | 0.32597917            | 0.788                | 48                     | 0.25920495           | 15.647               | 0.066                |
-| MAC000131       | 2011-12-20    | 0.218                   | 0.3575                | 1.077                | 48                     | 0.28759658           | 17.16                | 0.066                |
-| MAC000131       | 2011-12-21    | 0.1305                  | 0.23508333            | 0.705                | 48                     | 0.22206965           | 11.284               | 0.066                |
-| MAC000131       | 2011-12-22    | 0.089                   | 0.22135417            | 1.094                | 48                     | 0.2672389            | 10.625               | 0.062                |
-| MAC000131       | 2011-12-23    | 0.1605                  | 0.291125              | 0.749                | 48                     | 0.24907605           | 13.974               | 0.065                |
-| MAC000131       | 2011-12-24    | 0.107                   | 0.169                 | 0.613                | 47                     | 0.15068467           | 7.943                | 0.065                |
+| 131       | 15    | 0.48                  | 0.43            | 0.86                | 22                     | 0.23           | 9.50  | 0.072                |
+| 131       | 16    | 0.14                  | 0.29            | 1.11                | 48                     | 0.28           | 14.2  | 0.031                |
+| 131       | 17    | 0.10                  | 0.18            | 0.68                | 48                     | 0.18           | 9.11  | 0.064                |
+| 131       | 18    | 0.11                  | 0.21            | 0.67                | 48                     | 0.20           | 10.5  | 0.065                |
+| 131       | 19    | 0.19                  | 0.32            | 0.78                | 48                     | 0.25           | 15.6  | 0.066                |
+| 131       | 20    | 0.21                  | 0.35            | 1.07                | 48                     | 0.28           | 17.1  | 0.066                |
+| 131       | 21    | 0.13                  | 0.23            | 0.70                | 48                     | 0.22           | 11.2  | 0.066                |
+| 131       | 22    | 0.08                  | 0.22            | 1.09                | 48                     | 0.26           | 10.6  | 0.062                |
+| 131       | 23    | 0.16                  | 0.29            | 0.74                | 48                     | 0.24           | 13.9  | 0.065                |
+| 131       | 24    | 0.10                  | 0.16            | 0.61                | 47                     | 0.15           | 7.94  | 0.065                |
 
 ### 2. How many households are in each socioeconomic group?
 
@@ -257,10 +265,12 @@ While purposely ignoring metrics such as maximum or minimum as they most likely 
   GROUP BY stdorToU;
 ```
 
-| stdortou  |   mean_energy_sum   |   std_energy_sum   |   mean_energy_std    | median_energy_sum  | median_energy_std  |
+Note: The correspoding table has float values trimed to 2 decimal for visualization purposes. Column names have also been shortened.
+
+| stdortou  |   mean_e_sum   |   std_e_sum   |   mean_e_std    | med_e_sum  | med_e_std  |
 |-----------|---------------------|--------------------|----------------------|--------------------|--------------------|
-| Std       | 10.281588853956677  | 9.36848198669309   | 0.17530466467086622  | 7.902              | 0.133              |
-| ToU       | 9.498761779652584   | 8.076803342617131  | 0.16219470016108145  | 7.501              | 0.129              |
+| Std       | 10.28  | 9.36   | 0.17  | 7.90              | 0.13              |
+| ToU       | 9.49   | 8.07  | 0.16  | 7.50              | 0.12              |
 
 From the obtain data, we find that the most significant different is found in (1) the mean energy consumption per day, which appears to be higher in the `Std` tariff type, meaning the price is fixed. This could mean that people with fixed tariffs are less careful on when and how they consume energy, leading to a higher consumption. We find the same in (2) the median energy consumption per day.
 
@@ -326,10 +336,12 @@ Once that is done, we can group by, and finally calculate the indicators:
   GROUP BY day_type;
 ```
 
-| day_type  |  mean_energy_sum   |   std_energy_sum   |   mean_energy_std    | median_energy_sum  | median_energy_std  |
+Note: The correspoding table has float values trimed to 2 decimal for visualization purposes. Column names have also been shortened.
+
+| d_type  |  mean_e_sum   |   std_e_sum   |   mean_e_std    | med_e_sum  | med_e_std  |
 |-----------|--------------------|--------------------|----------------------|--------------------|--------------------|
-| weekday   | 9.987461653068868  | 9.065417173034772  | 0.17060615449513414  | 7.704              | 0.13               |
-| weekend   | 10.46783693386403  | 9.277346961547488  | 0.17783980603219574  | 8.112              | 0.137              |
+| weekday   | 9.98  | 9.06  | 0.170  | 7.70              | 0.13               |
+| weekend   | 10.46  | 9.27  | 0.177  | 8.11              | 0.137              |
 
 As expected, we find that the energy consumption, both mean and median, are higher during the weekends, indicating that people spend more time at home.
 
