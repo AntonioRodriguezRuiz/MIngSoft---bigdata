@@ -42,6 +42,6 @@ Then, it iterates over all the registers, dumps them into a JSON format and send
 
 ![First three entries of data in HDFS](images/hadoop.png)
 
-## Conclusions
+## Challenges encountered
 
 Overall the deliverable was quite easy and straight forward. It was basically replicating what we saw in the classes and adapting it to our needs.

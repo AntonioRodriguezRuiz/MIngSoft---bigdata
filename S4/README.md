@@ -8,6 +8,7 @@ kafka-topics --create --topic transactions --partitions 1 --replication-factor 1
 ```
 
 Then, we need to connect the topic to HDFS. To do that, we need to create a connector. The connector is a configuration file that tells Kafka how to connect to HDFS.
+
 ```bash
 curl -X POST -H "Content-Type: application/json" --data '{
   "name": "hdfs-sink-connector",
@@ -30,13 +31,16 @@ curl -X POST -H "Content-Type: application/json" --data '{
 
 ## Consuming data from CSV file and sending it to kafka
 
-The code available in `src/dag_deliverable.py` starts by sending the data to the Kafka topic. It reads the CSV file and sends it to the Kafka topic using the ProduceToTopicOperator dag provider.
+The code available in `src/dag_deliverable.py` starts by sending the data to the Kafka topic. It reads the CSV file and sends it to the Kafka topic using the ProduceToTopicOperator dag provider by returning json object representations of each of the rows in the CSV.
 
 Sending it will automatically trigger the HDFS connector to save the data in HDFS.
 
 ## Creating a table in Hive
 
-To create a table in Hive, we first create a database and then an external table via the following SQL statements via the HiveServer2Hook dag provider.
+To create a table in Hive, we first create a database and then an external table via the following SQL statements via the HiveServer2Hook dag provider, which provides us with a cursor we can use to execute things in Hive.
+
+Note that the created table is external, pointing to a directory in HDFS, so that the data is not copied to Hive, but rather it is read from HDFS. It is also stated that the data must be specified to be in text files and in JSON format, so that Hive knows how to correctly handle the data.
+
 ```sql
 > CREATE DATABASE IF NOT EXISTS weather
 > CREATE EXTERNAL TABLE IF NOT EXISTS {HIVE_TABLE} (
@@ -61,7 +65,7 @@ To create a table in Hive, we first create a database and then an external table
 
 ## Querying the data
 
-To query the data we connect to Hive the same way as before.
+To query the data we connect to Hive the same way as before, then use the cursor to send the query.
 
 For the first query, we must obtain the average temperatures of each room per day.
 
@@ -127,3 +131,7 @@ Finally, for the third, we must obtain the instances where humidity has changed 
 ![Hive query 2](images/query1.png)
 
 ![Hive query 3](images/query1.png)
+
+## Challenges encountered
+
+Overall no challenges were found from the technical side, apart from creating the Hive table so that it points to the correct directory in HDFS. Apart from that, there was only one frustrating thing, and it was the need to reinitialize airflow when DAGs changed, as for me, it did not automatically refreshed. Also, debugging the DAG was not trivial, one needed isolate the execution of part of the DAG to reduce time to execute and also wait for the overhead of the DAG initialization. However the logging mechanism was confortable so at least we had that. Other than that, I did not find any further troubles.

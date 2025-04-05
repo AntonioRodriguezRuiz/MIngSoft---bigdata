@@ -332,3 +332,7 @@ Once that is done, we can group by, and finally calculate the indicators:
 | weekend   | 10.46783693386403  | 9.277346961547488  | 0.17783980603219574  | 8.112              | 0.137              |
 
 As expected, we find that the energy consumption, both mean and median, are higher during the weekends, indicating that people spend more time at home.
+
+## Challenges encountered
+
+Overall, I found this deliverable quite straight forward and did not find much trouble. The only thing I would consider was a bit more challenging was the 9th question, which required the use of the `LAG` function, which I am not really used to use, but reading some documentation is enough to understand how to use it in this case.
